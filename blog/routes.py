@@ -1,8 +1,7 @@
+from flask import render_template
 from flask import session, redirect, url_for, flash, request, abort
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import login_user, current_user, logout_user, login_required
-from flask import render_template
-from sqlalchemy import extract
 
 from blog import app, db, bcrypt
 from blog.forms import RegistrationFrom, LoginForm, UpdateProfileForm, BuyForm, FilterBox
@@ -28,17 +27,17 @@ def home():
     enddate = session['enddate']
     buys = Buy.query.filter(Buy.date >= startdate).\
         filter(Buy.date <= enddate).all()
-    return render_template('home.html', buys=buys, title=startdate)
+    return render_template('home.html', buys=buys, title='Sendous Budget')
 
 
-@app.route('/date', methods=['GET', 'POST'])
+@app.route('/filter', methods=['GET', 'POST'])
 def date():
     form = FilterBox()
     if form.validate_on_submit():
         session['startdate'] = form.startdate.data.strftime('%Y-%m-%d')
         session['enddate'] = form.enddate.data.strftime('%Y-%m-%d')
         return redirect(url_for('home'))
-    return render_template('date.html', form=form)
+    return render_template('inc/filter.html', form=form, title='فیلتر')
 
 
 @app.route('/buy/<int:buy_id>')

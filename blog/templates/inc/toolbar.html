@@ -1,29 +1,10 @@
 {% if request.path == "/" %}
 <ul class="nav nav-pills nav-fill sticky-top py-3 shadow bg-gradient bg-success p-0" >
-    <li class="nav-item">
-        <a class="button icon text-light float-right" href="javascript:void(0);" onclick="window.history.back();" role="button" title="ماه قبل">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                 class="bi bi-arrow-right-short">
-                <path fill-rule="evenodd"
-                      d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"/>
-            </svg>
-        </a>
-    </li>
-
     <li class="nav-item text-light">
         <br>
         <div class="fs-1">{{ buys|sum(attribute='price') }}<span class="fs-6"> تومان</span></div>
         <div class="fs-6 fw-lighter">جمع حساب فروردین ماه</div>
         <br>
-    </li>
-    <li class="nav-item">
-        <a class="button icon text-light float-left" href="javascript:void(0);" onclick="window.history.back();" role="button" title="ماه بعد">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                 class="bi bi-arrow-left-short" >
-                <path fill-rule="evenodd"
-                      d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/>
-            </svg>
-        </a>
     </li>
 </ul>
 {% else %}
