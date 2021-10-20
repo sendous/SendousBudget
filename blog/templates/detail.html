@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="card p-0">
+    <div class="card-body p-0">
+        <div class="p-3 border-bottom">
+            <h4 class="card-title">{{ buy.title }}</h4>
+            <h6 class="card-text mb-2">{{ buy.price }} تومان</h6>
+            <small class="text-muted mb-5">{{ buy.author.username }} {{ buy.date.strftime('%Y-%m-%d') }}</small>
+        </div>
+
+        {% if buy.author == current_user %}
+                <a href="{{ url_for('update', buy_id=buy.id) }}" class="btn btn-link">ویرایش</a>
+                <a href="{{ url_for('delete', buy_id=buy.id) }}" class="btn btn-link">حذف</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

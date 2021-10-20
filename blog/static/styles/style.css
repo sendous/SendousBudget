@@ -1,0 +1,26 @@
+﻿@import url(fontiran.css); /* لینک فایلی که وظیفه بارگذاری فونت ها را برعهده دارد */
+
+html {
+    height: 100%;
+}
+
+body {
+	font-family: iranyekan ,roboto ,Arial !important;
+	direction: rtl;
+	margin: 0;
+	text-align: right;
+	height: 100%;
+}
+
+.sticky-bottom {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    z-index: 1020;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
