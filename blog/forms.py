@@ -1,10 +1,12 @@
+from datetime import datetime, timedelta
+
+from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField
-from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
-from blog.models import User
-from flask_login import current_user
 from wtforms.fields.html5 import DateField
-from datetime import datetime
+from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
+
+from blog.models import User
 
 
 class RegistrationFrom(FlaskForm):
@@ -53,10 +55,11 @@ class UpdateProfileForm(FlaskForm):
 class BuyForm(FlaskForm):
     title = StringField('عنوان', validators=[DataRequired()])
     price = IntegerField('هزینه', validators=[DataRequired()])
+    category = StringField('دسته بندی', validators=[DataRequired()])
     submit = SubmitField('انتشار')
 
 
 class FilterBox(FlaskForm):
-    startdate = DateField('تاریخ شروع', format='%Y-%m-%d', default=datetime.now())
-    enddate = DateField('تاریخ پایان', format='%Y-%m-%d', default=datetime.now())
+    startdate = DateField('تاریخ شروع', default=datetime.today())
+    enddate = DateField('تاریخ پایان', default=datetime.today() + timedelta(weeks=4))
     submit = SubmitField('تایید')

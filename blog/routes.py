@@ -20,14 +20,11 @@ from blog.models import User, Buy
 @app.route('/')
 @register_breadcrumb(app, '.', 'Home')
 def home():
-    # form = FilterBox()
-    # buys = Buy.query.filter(extract('month', Buy.date) == form).all()
-    # buys = Buy.query.filter(Buy.date <= '1988-01-17').filter(Buy.date >= '2022-01-17').all()
     startdate = session['startdate']
     enddate = session['enddate']
     buys = Buy.query.filter(Buy.date >= startdate).\
         filter(Buy.date <= enddate).all()
-    return render_template('home.html', buys=buys, title='Sendous Budget')
+    return render_template('home.html', buys=buys, title=startdate)
 
 
 @app.route('/filter', methods=['GET', 'POST'])
@@ -37,7 +34,7 @@ def date():
         session['startdate'] = form.startdate.data.strftime('%Y-%m-%d')
         session['enddate'] = form.enddate.data.strftime('%Y-%m-%d')
         return redirect(url_for('home'))
-    return render_template('inc/filter.html', form=form, title='فیلتر')
+    return render_template('inc/date.html', form=form, title='فیلتر')
 
 
 @app.route('/buy/<int:buy_id>')
@@ -105,7 +102,7 @@ def profile():
 def new_buy():
     form = BuyForm()
     if form.validate_on_submit():
-        buy = Buy(title=form.title.data, price=form.price.data, author=current_user)
+        buy = Buy(title=form.title.data, price=form.price.data, author=current_user, category=form.category.data)
         db.session.add(buy)
         db.session.commit()
         flash('عملیات با موفقیت انجام شد', 'info')
@@ -135,10 +132,12 @@ def update(buy_id):
     if form.validate_on_submit():
         buy.title = form.title.data
         buy.price = form.price.data
+        buy.category = form.category.data
         db.session.commit()
         flash('ویرایش با موفقیت انجام شد', 'info')
         return redirect(url_for('detail', buy_id=buy.id))
     elif request.method == 'GET':
         form.title.data = buy.title
         form.price.data = buy.price
+        form.category.data = buy.category
     return render_template('update.html', form=form, title='ویرایش ' + buy.title)
