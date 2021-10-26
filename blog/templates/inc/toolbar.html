@@ -1,14 +1,26 @@
 {% if request.path == "/" %}
-<ul class="nav nav-pills nav-fill sticky-top py-3 shadow bg-gradient bg-success p-0" >
+<ul class="nav nav-pills nav-fill sticky-top shadow bg-gradient bg-success p-0" style="display: block">
+    <li class="d-flex">
+        <a class="float-right text-light p-3 justify-content-between align-items-center" href="/filter">
+            <svg class="bi bi-funnel"
+                 fill="currentColor"
+                 height="20" viewBox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"></path>
+            </svg>
+        </a>
+    </li>
+
     <li class="nav-item text-light">
-        <br>
-        <div class="fs-1">{{ buys|sum(attribute='price') }}<span class="fs-6"> تومان</span></div>
-        <div class="fs-6 fw-lighter">جمع حساب فروردین ماه</div>
+        <h3>{{ buys|sum(attribute='price') }}<span> تومان</span></h3>
+        <!--        <small>مجموع خریدها</small>-->
+        <!--        <h6>{{ session['startdate'] }}-->
+        <!--            {{ session['enddate'] }}</h6>-->
         <br>
     </li>
+
 </ul>
 {% else %}
-<ul class="nav nav-pills nav-fill sticky-top p-2 shadow bg-gradient" style="background-color: #7d8c92 !important" >
+<ul class="nav nav-pills nav-fill sticky-top p-2 shadow bg-gradient bg-success">
     <li class="nav-item float-right text-light">
 
     </li>
@@ -16,7 +28,8 @@
         {% if title %} {{ title }} {% else %} Default title {% endif %}
     </li>
     <li class="nav-item">
-        <a class="button icon text-light float-left" href="javascript:void(0);" onclick="window.history.back();" role="button" title="بازگشت">
+        <a class="button icon text-light float-left" href="javascript:void(0);" onclick="window.history.back();"
+           role="button" title="بازگشت">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                  class="bi bi-arrow-left-short">
                 <path fill-rule="evenodd"

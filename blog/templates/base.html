@@ -2,18 +2,27 @@
 <html lang="en">
 <head>
     {% block head %}
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>{% if title %}{{ title }}{% else %}Default title{% endif %}</title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>{% if title %}{{ title }}{% else %}Default title{% endif %}</title>
 
-        {% block styles %}
-            <!-- Bootstrap CSS -->
-            {{ bootstrap.load_css() }}
-        {% endblock %}
+    {% block styles %}
+    <!-- Bootstrap CSS -->
+    {{ bootstrap.load_css() }}
+    {% endblock %}
 
-        <link href="{{ url_for('static', filename= 'styles/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename= 'styles/style.css') }}" rel="stylesheet">
+    <link href="/static/images/icon-192x192.png" rel="icon" type="image/png">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta Tags required for Progressive Web App -->
+    <meta content="#28a745" name="apple-mobile-web-app-status-bar">
+    <meta content="#28a745" name="theme-color">
+
+    <link href="{{ url_for('static', filename= '/manifest.json') }}" rel="manifest">
+    <link href="/static/images/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+    <link href="/static/images/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+    <link href="/static/images/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
     {% endblock %}
 </head>
 <body>
@@ -30,9 +39,12 @@
     {% include 'inc/navbar.html' %}
 </div>
 
-{% block scripts %}
-    {{ bootstrap.load_js() }}
-{% endblock %}
 
+{% block scripts %}
+<!-- import the webpage's javascript file -->
+<script defer src="static/js/script.js"></script>
+
+{{ bootstrap.load_js() }}
+{% endblock %}
 </body>
 </html>

@@ -1,3 +1,5 @@
+import datetime
+
 from flask import render_template
 from flask import session, redirect, url_for, flash, request, abort
 from flask_breadcrumbs import register_breadcrumb
@@ -16,15 +18,20 @@ from blog.models import User, Buy
 #     filter(extract('year', Buy.date) == 2021) \
 #     .paginate(per_page=10, error_out=True)
 
-
 @app.route('/')
 @register_breadcrumb(app, '.', 'Home')
 def home():
-    startdate = session['startdate']
-    enddate = session['enddate']
-    buys = Buy.query.filter(Buy.date >= startdate).\
-        filter(Buy.date <= enddate).all()
-    return render_template('home.html', buys=buys, title=startdate)
+    if 'startdate' not in session:
+        startdate = datetime.datetime.today().strftime('%Y-%m-%d')
+        enddate = datetime.datetime.today().strftime('%Y-%m-%d')
+        buys = Buy.query.filter(Buy.date >= startdate). \
+            filter(Buy.date <= enddate).all()
+    else:
+        startdate = session['startdate']
+        enddate = session['enddate']
+        buys = Buy.query.filter(Buy.date >= startdate). \
+            filter(Buy.date <= enddate).all()
+    return render_template('home.html', buys=buys, title='Sendous Budget')
 
 
 @app.route('/filter', methods=['GET', 'POST'])
@@ -34,7 +41,7 @@ def date():
         session['startdate'] = form.startdate.data.strftime('%Y-%m-%d')
         session['enddate'] = form.enddate.data.strftime('%Y-%m-%d')
         return redirect(url_for('home'))
-    return render_template('inc/date.html', form=form, title='فیلتر')
+    return render_template('inc/filter.html', form=form, title='فیلتر')
 
 
 @app.route('/buy/<int:buy_id>')

@@ -28,3 +28,12 @@ ul, li {
     background-color: #28a745;
     border-color: #28a745;
 }
+
+
+.navbar {
+    border-top:1px solid #cfd8dc
+}
+
+.nav-link {
+    fill: #455a64;
+}
