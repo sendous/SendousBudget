@@ -10,17 +10,28 @@ from blog.forms import RegistrationFrom, LoginForm, UpdateProfileForm, BuyForm, 
 from blog.models import User, Buy
 
 
-# @app.route('/', methods=['GET', 'POST'])
-# @app.route('/page/<int:month_num>', methods=['GET', 'POST'])
-# buys = Buy.query.filter(extract('month', Buy.date) == month_num).all()
-# pages = Buy.query. \
-#     filter(extract('month', Buy.date) == page_num). \
-#     filter(extract('year', Buy.date) == 2021) \
-#     .paginate(per_page=10, error_out=True)
-
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @register_breadcrumb(app, '.', 'Home')
 def home():
+    form = BuyForm()
+    # if form.validate_on_submit():
+    #     s = re.match('^(?P<string>[A-Za-z-W]+)(?P<integer>[0-9]+)$', form.desc.data)
+    #     if s:
+    #         buy = Buy(desc=s.group('string'), price=int(s.group('integer')),
+    #                   author=current_user, category=form.category.data)
+    #         db.session.add(buy)
+    #         db.session.commit()
+    #         flash('عملیات با موفقیت انجام شد', 'info')
+    #     else:
+    #         flash("!!!")
+
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'Next':
+            flash('Next')
+
+        elif request.form['submit_button'] == 'Previous':
+            flash('Previous')
+
     if 'startdate' not in session:
         startdate = datetime.datetime.today().strftime('%Y-%m-%d')
         enddate = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -31,7 +42,8 @@ def home():
         enddate = session['enddate']
         buys = Buy.query.filter(Buy.date >= startdate). \
             filter(Buy.date <= enddate).all()
-    return render_template('home.html', buys=buys, title='Sendous Budget')
+
+    return render_template('home.html', form=form, buys=buys, title='Sendous Budget')
 
 
 @app.route('/filter', methods=['GET', 'POST'])
@@ -41,13 +53,15 @@ def date():
         session['startdate'] = form.startdate.data.strftime('%Y-%m-%d')
         session['enddate'] = form.enddate.data.strftime('%Y-%m-%d')
         return redirect(url_for('home'))
+    flash(form.startdate1.data.strftime('%Y-%m-%d'))
+    flash(form.enddate1.data.strftime('%Y-%m-%d'))
     return render_template('inc/filter.html', form=form, title='فیلتر')
 
 
 @app.route('/buy/<int:buy_id>')
 def detail(buy_id):
     buy = Buy.query.get_or_404(buy_id)
-    return render_template('detail.html', buy=buy, title=buy.title)
+    return render_template('detail.html', buy=buy, title=buy.desc)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -66,7 +80,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('home'), title='ورود')
+        return redirect(url_for('home'), title="Login")
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -109,7 +123,17 @@ def profile():
 def new_buy():
     form = BuyForm()
     if form.validate_on_submit():
-        buy = Buy(title=form.title.data, price=form.price.data, author=current_user, category=form.category.data)
+        # s = re.match('^(?P<string>[A-Za-z-W]+)(?P<integer>[0-9]+)$', form.desc.data)
+        # if s:
+        #     buy = Buy(desc=s.group('string'), price=int(s.group('integer')), author=current_user, category=form.category.data)
+        #     db.session.add(buy)
+        #     db.session.commit()
+        #     flash('عملیات با موفقیت انجام شد', 'info')
+        #     return redirect(url_for('home'))
+        # else:
+        #     flash("!!!")
+        buy = Buy(desc=form.desc.data, price=form.price.data, author=current_user,
+                  category=form.category.data)
         db.session.add(buy)
         db.session.commit()
         flash('عملیات با موفقیت انجام شد', 'info')
@@ -137,14 +161,14 @@ def update(buy_id):
         abort(403)
     form = BuyForm()
     if form.validate_on_submit():
-        buy.title = form.title.data
+        buy.desc = form.desc.data
         buy.price = form.price.data
         buy.category = form.category.data
         db.session.commit()
         flash('ویرایش با موفقیت انجام شد', 'info')
         return redirect(url_for('detail', buy_id=buy.id))
     elif request.method == 'GET':
-        form.title.data = buy.title
+        form.desc.data = buy.desc
         form.price.data = buy.price
         form.category.data = buy.category
-    return render_template('update.html', form=form, title='ویرایش ' + buy.title)
+    return render_template('update.html', form=form, title='ویرایش ' + buy.desc)

@@ -34,6 +34,25 @@ ul, li {
     border-top:1px solid #cfd8dc
 }
 
-.nav-link {
+./**/nav-link {
     fill: #455a64;
 }
+
+
+/*
+home*/
+
+/*
+.form-control.new-buy {
+    height: 60px;
+    border-color: transparent;
+    background: #2632380f;
+    cursor: pointer;
+}
+
+.form-control.new-buy:focus {
+    height: 60px;
+    border-color: #ced4da;
+    background: #fff;
+    cursor: pointer;
+}*/

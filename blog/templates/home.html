@@ -2,6 +2,11 @@
 
 {% block content %}
 
+<!--<form action="" method="post" class="mb-4">-->
+<!--    {{ form.csrf_token }}-->
+<!--    {{ form.desc(class='form-control new-buy py-4',placeholder='عنوان خرید + قیمت') }}-->
+<!--</form>-->
+
 {% for category, items in buys | groupby('category') %}
 
 <ul class="list-group py-2 px-0">
@@ -17,7 +22,7 @@
             <li class="list-group-item px-0">
                 <a class="d-flex justify-content-between align-items-center list-group-item-light"
                    href="{{ url_for('detail', buy_id=buy.id) }}">
-                    <small>{{ buy.title }}</small>
+                    <small>{{ buy.desc }}</small>
                     <span class="badge badge-pill px-0">{{ buy.price }} تومان</span>
                 </a>
             </li>

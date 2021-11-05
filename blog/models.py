@@ -23,11 +23,15 @@ class User(db.Model, UserMixin):
 
 class Buy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120), nullable=False)
+    desc = db.Column(db.String(), nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.date.today())
     price = db.Column(db.Integer, nullable=False)
-    category = db.Column(db.String(120), nullable=False)
+    category = db.Column(db.String(120), nullable=False, default='سایر')
+    tags = db.Column(db.String())
+    image = db.Column(db.String())
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
     def __repr__(self):
-        return f'{self.__class__.__name__}({self.id}, {self.title[:30]}, {self.category}, {self.date.today()})'
+        return f'{self.__class__.__name__}({self.id}, {self.desc}, {self.category}' \
+               f'{self.tags}, {self.image}, {self.date.today()})'
