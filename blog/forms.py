@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from flask_login import current_user
@@ -58,16 +58,10 @@ class BuyForm(FlaskForm):
     desc = StringField('توضیحات', validators=[DataRequired()])
     category = StringField('دسته بندی', default='سایر')
     date = DateField('تاریخ', default=datetime.today())
-    # tags = StringField('برچسب')
-    # image = FileField('تصویر')
     submit = SubmitField('انتشار')
 
 
 class FilterBox(FlaskForm):
     startdate = DateField('تاریخ شروع', default=datetime.today())
-    enddate = DateField('تاریخ پایان', default=datetime.today() + timedelta(weeks=4))
-
-    startdate1 = DateField('تاریخ شروع', default=datetime.today())
-    enddate1 = DateField('تاریخ پایان', default=datetime.today() + relativedelta(months=+1))
-
+    enddate = DateField('تاریخ پایان', default=datetime.today() + relativedelta(months=+1))
     submit = SubmitField('تایید')

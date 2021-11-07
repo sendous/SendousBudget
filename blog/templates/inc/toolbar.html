@@ -20,9 +20,11 @@
 </ul>
 
 <form action="/" class="d-flex justify-content-between" method="post">
+    {{ form.hidden_tag() }}
     <input name="submit_button" type="submit" value="Next"/>
     <input name="submit_button" type="submit" value="Previous"/>
 </form>
+
 
 {% else %}
 <ul class="nav nav-pills nav-fill sticky-top p-2 shadow bg-gradient bg-success">

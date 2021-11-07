@@ -1,5 +1,6 @@
 import datetime
 
+from dateutil.relativedelta import relativedelta
 from flask import render_template
 from flask import session, redirect, url_for, flash, request, abort
 from flask_breadcrumbs import register_breadcrumb
@@ -9,28 +10,14 @@ from blog import app, db, bcrypt
 from blog.forms import RegistrationFrom, LoginForm, UpdateProfileForm, BuyForm, FilterBox
 from blog.models import User, Buy
 
+month = int(datetime.datetime.today().strftime('%m'))
+
 
 @app.route('/', methods=['GET', 'POST'])
 @register_breadcrumb(app, '.', 'Home')
 def home():
+    global month
     form = BuyForm()
-    # if form.validate_on_submit():
-    #     s = re.match('^(?P<string>[A-Za-z-W]+)(?P<integer>[0-9]+)$', form.desc.data)
-    #     if s:
-    #         buy = Buy(desc=s.group('string'), price=int(s.group('integer')),
-    #                   author=current_user, category=form.category.data)
-    #         db.session.add(buy)
-    #         db.session.commit()
-    #         flash('عملیات با موفقیت انجام شد', 'info')
-    #     else:
-    #         flash("!!!")
-
-    if request.method == 'POST':
-        if request.form['submit_button'] == 'Next':
-            flash('Next')
-
-        elif request.form['submit_button'] == 'Previous':
-            flash('Previous')
 
     if 'startdate' not in session:
         startdate = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -43,7 +30,18 @@ def home():
         buys = Buy.query.filter(Buy.date >= startdate). \
             filter(Buy.date <= enddate).all()
 
-    return render_template('home.html', form=form, buys=buys, title='Sendous Budget')
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'Next':
+            month += 1
+
+        elif request.form['submit_button'] == 'Previous':
+            startdate = datetime.datetime.today() + relativedelta(months=-1)
+            enddate = datetime.datetime.today() + relativedelta(months=-2)
+            buys = Buy.query.filter(Buy.date >= startdate). \
+                filter(Buy.date <= enddate).all()
+            flash(startdate.strftime('%Y-%m'))
+
+    return render_template('home.html', form=form, buys=buys, title=startdate)
 
 
 @app.route('/filter', methods=['GET', 'POST'])
@@ -53,8 +51,6 @@ def date():
         session['startdate'] = form.startdate.data.strftime('%Y-%m-%d')
         session['enddate'] = form.enddate.data.strftime('%Y-%m-%d')
         return redirect(url_for('home'))
-    flash(form.startdate1.data.strftime('%Y-%m-%d'))
-    flash(form.enddate1.data.strftime('%Y-%m-%d'))
     return render_template('inc/filter.html', form=form, title='فیلتر')
 
 
