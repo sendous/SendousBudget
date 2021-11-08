@@ -10,38 +10,27 @@ from blog import app, db, bcrypt
 from blog.forms import RegistrationFrom, LoginForm, UpdateProfileForm, BuyForm, FilterBox
 from blog.models import User, Buy
 
-month = int(datetime.datetime.today().strftime('%m'))
+startDate = datetime.datetime.today()
 
 
 @app.route('/', methods=['GET', 'POST'])
 @register_breadcrumb(app, '.', 'Home')
 def home():
-    global month
+    global startDate, endDate
     form = BuyForm()
-
-    if 'startdate' not in session:
-        startdate = datetime.datetime.today().strftime('%Y-%m-%d')
-        enddate = datetime.datetime.today().strftime('%Y-%m-%d')
-        buys = Buy.query.filter(Buy.date >= startdate). \
-            filter(Buy.date <= enddate).all()
-    else:
-        startdate = session['startdate']
-        enddate = session['enddate']
-        buys = Buy.query.filter(Buy.date >= startdate). \
-            filter(Buy.date <= enddate).all()
-
     if request.method == 'POST':
         if request.form['submit_button'] == 'Next':
-            month += 1
-
+            startDate = startDate + relativedelta(months=+1, day=1)
+            endDate = startDate - relativedelta(months=-1, day=1)
+            buys = Buy.query.filter(Buy.date >= startDate). \
+                filter(Buy.date < endDate).all()
+            return render_template('home.html', form=form, buys=buys, title=startDate)
         elif request.form['submit_button'] == 'Previous':
-            startdate = datetime.datetime.today() + relativedelta(months=-1)
-            enddate = datetime.datetime.today() + relativedelta(months=-2)
-            buys = Buy.query.filter(Buy.date >= startdate). \
-                filter(Buy.date <= enddate).all()
-            flash(startdate.strftime('%Y-%m'))
-
-    return render_template('home.html', form=form, buys=buys, title=startdate)
+            startDate = startDate + relativedelta(months=-1, day=1)
+            endDate = startDate + relativedelta(months=+1, day=1)
+            buys = Buy.query.filter(Buy.date >= startDate). \
+                filter(Buy.date < endDate).all()
+            return render_template('home.html', form=form, buys=buys, title=startDate)
 
 
 @app.route('/filter', methods=['GET', 'POST'])
