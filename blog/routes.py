@@ -16,21 +16,28 @@ startDate = datetime.datetime.today()
 @app.route('/', methods=['GET', 'POST'])
 @register_breadcrumb(app, '.', 'Home')
 def home():
-    global startDate, endDate
+    global startDate
     form = BuyForm()
     if request.method == 'POST':
-        if request.form['submit_button'] == 'Next':
+        if request.form['submit_button'] == 'ماه بعد':
             startDate = startDate + relativedelta(months=+1, day=1)
             endDate = startDate - relativedelta(months=-1, day=1)
             buys = Buy.query.filter(Buy.date >= startDate). \
                 filter(Buy.date < endDate).all()
-            return render_template('home.html', form=form, buys=buys, title=startDate)
-        elif request.form['submit_button'] == 'Previous':
+        elif request.form['submit_button'] == 'ماه قبل':
             startDate = startDate + relativedelta(months=-1, day=1)
             endDate = startDate + relativedelta(months=+1, day=1)
             buys = Buy.query.filter(Buy.date >= startDate). \
                 filter(Buy.date < endDate).all()
-            return render_template('home.html', form=form, buys=buys, title=startDate)
+    else:
+        endDate = startDate - relativedelta(months=-1, day=1)
+        buys = Buy.query.filter(Buy.date >= startDate). \
+            filter(Buy.date < endDate).all()
+    return render_template('home.html',
+                           form=form,
+                           buys=buys,
+                           startDate=startDate.strftime('%Y/%m'),
+                           title='Sendous')
 
 
 @app.route('/filter', methods=['GET', 'POST'])
