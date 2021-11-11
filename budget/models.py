@@ -2,7 +2,7 @@ import datetime
 
 from flask_login import UserMixin
 
-from blog import db, login_manager
+from budget import db, login_manager
 
 
 @login_manager.user_loader

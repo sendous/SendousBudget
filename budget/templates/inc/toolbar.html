@@ -10,9 +10,11 @@
 
     <form action="/" class="d-flex justify-content-between" method="post">
         {{ form.hidden_tag() }}
-        <input class="btn icon text-light float-right"
+        <input class="btn icon text-light" style="font-weight:100"
                name="submit_button" type="submit" value="ماه بعد"/>
-        <input class="btn icon text-light float-left"
+        <input class="btn icon text-light" name="submit_button"
+               style="font-weight:100" type="submit" value="این ماه">
+        <input class="btn icon text-light fw-light" style="font-weight:100"
                name="submit_button" type="submit" value="ماه قبل"/>
     </form>
 

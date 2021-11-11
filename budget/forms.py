@@ -7,7 +7,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Integ
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 
-from blog.models import User
+from budget.models import User
 
 
 class RegistrationFrom(FlaskForm):

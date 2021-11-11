@@ -6,9 +6,9 @@ from flask import session, redirect, url_for, flash, request, abort
 from flask_breadcrumbs import register_breadcrumb
 from flask_login import login_user, current_user, logout_user, login_required
 
-from blog import app, db, bcrypt
-from blog.forms import RegistrationFrom, LoginForm, UpdateProfileForm, BuyForm, FilterBox
-from blog.models import User, Buy
+from budget import app, db, bcrypt
+from budget.forms import RegistrationFrom, LoginForm, UpdateProfileForm, BuyForm, FilterBox
+from budget.models import User, Buy
 
 startDate = datetime.datetime.today()
 
@@ -18,6 +18,7 @@ startDate = datetime.datetime.today()
 def home():
     global startDate
     form = BuyForm()
+
     if request.method == 'POST':
         if request.form['submit_button'] == 'ماه بعد':
             startDate = startDate + relativedelta(months=+1, day=1)
@@ -27,6 +28,11 @@ def home():
         elif request.form['submit_button'] == 'ماه قبل':
             startDate = startDate + relativedelta(months=-1, day=1)
             endDate = startDate + relativedelta(months=+1, day=1)
+            buys = Buy.query.filter(Buy.date >= startDate). \
+                filter(Buy.date < endDate).all()
+        elif request.form['submit_button'] == 'این ماه':
+            startDate = datetime.datetime.today()
+            endDate = startDate - relativedelta(months=-1, day=1)
             buys = Buy.query.filter(Buy.date >= startDate). \
                 filter(Buy.date < endDate).all()
     else:

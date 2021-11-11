@@ -16,4 +16,4 @@ login_manager.login_message = 'please login first'
 bootstrap = Bootstrap(app)
 Breadcrumbs(app=app)
 
-from blog import routes
+from budget import routes
